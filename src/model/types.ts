@@ -1,6 +1,7 @@
 export interface TodoItem {
   id: string
   title: string
+  quote: string
   dueDate?: Date
   completed: boolean
 }

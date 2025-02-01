@@ -19,7 +19,7 @@ export const Filters = () => {
           onClick={() => setFilter(option.value)}
           className={cn(
             'text-xl px-3 py-1 rounded-lg border-1 cursor-pointer',
-            option.value === filter ? ' border-indigo-400 text-indigo-400' : 'border-transparent'
+            option.value === filter ? ' border-indigo-300 text-indigo-300' : 'border-transparent'
           )}>
           {option.label}
         </button>

@@ -3,6 +3,7 @@ import { create } from 'zustand/react'
 import { v4 as uuid } from 'uuid'
 import { persist } from 'zustand/middleware'
 import { addDays, isAfter } from 'date-fns'
+import { fetchQuote } from '../utils/fetchQuote.ts'
 
 interface TodoStore {
   sort: Sort
@@ -75,9 +76,10 @@ export const useTodoStore = create<TodoStore>()(
         return Sort.NoSort
       },
 
-      addTodo: (title: string) => {
+      addTodo: async (title: string) => {
+        const quote = await fetchQuote()
         set(() => ({
-          todos: [...get().todos, { ...parseTitle(title), id: uuid(), completed: false }],
+          todos: [...get().todos, { ...parseTitle(title), id: uuid(), completed: false, quote }],
         }))
       },
       removeTodo: (id: string) => {

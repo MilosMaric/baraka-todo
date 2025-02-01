@@ -42,20 +42,21 @@ export const TodoItemView = ({ todo }: { todo: TodoItem }) => {
           />
         </div>
       </div>
-      <div className="flex justify-between w-full items-center text-indigo-400 italic text-xs">
+      <p className="text-indigo-300 italic text-sm m-2 text-center">{todo.quote}</p>
+      <div className="flex justify-between w-full items-center text-indigo-300 italic text-xs">
         <div className="flex gap-2 items-center">
           <p className="text-nowrap">{todo.dueDate ? 'Snooze for' : 'Due in'}:</p>
           {dueDateModifiers.map(days => (
             <div
               key={`${todo.id}_${days}`}
               onClick={() => extendDueDate(todo.id, days)}
-              className="px-1 py-0.5 rounded-lg border-1 cursor-pointer select-none border-indigo-400">
+              className="px-1 py-0.5 rounded-lg border-1 cursor-pointer select-none border-indigo-300">
               {`${days}d`}
             </div>
           ))}
         </div>
         {todo.dueDate && (
-          <p className="text-end text-xs text-indigo-400 italic w-full">{`Due in ${formatDistanceToNow(todo.dueDate)}`}</p>
+          <p className="text-end text-xs text-indigo-300 italic w-full">{`Due in ${formatDistanceToNow(todo.dueDate)}`}</p>
         )}
       </div>
     </div>

@@ -32,7 +32,7 @@ export const TodoItemList = () => {
   return (
     <div className="flex flex-col gap-10 items-center select-none">
       <div className="flex flex-col gap-3 items-center">
-        <p className="text-2xl">New todo (press Enter to add):</p>
+        <p className="text-2xl">New Todo item:</p>
         <div className="flex gap-1 flex-col items-center">
           <input
             autoFocus
@@ -41,17 +41,17 @@ export const TodoItemList = () => {
             onKeyDown={onKeyDown}
             placeholder="Enter Todo title"
             onChange={e => setTitle(e.target.value)}
-            className="border-2 border-indigo-400 outline-0 rounded-md p-2 min-w-lg"
+            className="border-2 border-indigo-300 outline-0 rounded-md p-2 min-w-lg"
           />
-          <p className="text-indigo-400 italic text-sm">Press Enter to Add</p>
-          <p className="text-indigo-400 italic text-sm">
+          <p className="text-indigo-300 italic text-sm">Press Enter to Add</p>
+          <p className="text-indigo-300 italic text-sm">
             Finish with "+N" to add Due Date N days from now
           </p>
         </div>
       </div>
       <Filters />
       <div className="flex flex-col gap-2 w-xl">
-        <div className="flex gap-2 items-center justify-end text-indigo-400">
+        <div className="flex gap-2 items-center justify-end text-indigo-300">
           <p>Sort by Due date:</p>
           <FontAwesomeIcon
             size="lg"
@@ -60,7 +60,7 @@ export const TodoItemList = () => {
             className="cursor-pointer"
           />
         </div>
-        <div className="flex flex-col gap-5 items-center">
+        <div className="flex flex-col gap-5 items-center overflow-y-auto h-[60vh] no-scrollbar">
           {sortedTodos().map(todo => (
             <TodoItemView todo={todo} key={todo.id} />
           ))}
