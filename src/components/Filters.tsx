@@ -1,5 +1,5 @@
 import { Filter } from '../model/types.ts'
-import { useTodoStore } from '../model/store.ts'
+import { useAppStore } from '../model/store.ts'
 import cn from 'classnames'
 
 const filterOptions = [
@@ -9,7 +9,7 @@ const filterOptions = [
 ]
 
 export const Filters = () => {
-  const { filter, setFilter } = useTodoStore()
+  const { filter, setFilter } = useAppStore()
 
   return (
     <div className="flex justify-center gap-3">

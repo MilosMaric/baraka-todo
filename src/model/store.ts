@@ -5,17 +5,25 @@ import { persist } from 'zustand/middleware'
 import { addDays, isAfter } from 'date-fns'
 import { fetchQuote } from '../utils/fetchQuote.ts'
 
-interface TodoStore {
+interface AppStore {
   sort: Sort
   filter: Filter
+  loggedUser?: string
+
   todos: TodoItem[]
-  nextSort: () => Sort
-  setNextSort: () => void
   sortedTodos: () => TodoItem[]
   filteredTodos: () => TodoItem[]
+  loggedUsersTodos: () => TodoItem[]
+
+  nextSort: () => Sort
+
+  setNextSort: () => void
+  setFilter: (filter: Filter) => void
+
+  logout: () => void
   addTodo: (title: string) => void
   removeTodo: (id: string) => void
-  setFilter: (filter: Filter) => void
+  login: (username: string) => void
   toggleCompleted: (id: string) => void
   extendDueDate: (id: string, days: number) => void
 }
@@ -35,22 +43,27 @@ const parseTitle = (title: string): Pick<TodoItem, 'title' | 'dueDate'> => {
   return { title }
 }
 
-export const useTodoStore = create<TodoStore>()(
+export const useAppStore = create<AppStore>()(
   persist(
     (set, get) => ({
       todos: [],
       sort: Sort.NoSort,
       filter: Filter.All,
+      loggedUser: undefined,
+
+      loggedUsersTodos: () => get().todos.filter(todo => todo.owner === get().loggedUser),
 
       filteredTodos: () =>
-        get().todos.filter(todo => {
-          const filter = get().filter
-          return (
-            filter === Filter.All ||
-            (filter === Filter.Completed && todo.completed) ||
-            (filter === Filter.Active && !todo.completed)
-          )
-        }),
+        get()
+          .loggedUsersTodos()
+          .filter(todo => {
+            const filter = get().filter
+            return (
+              filter === Filter.All ||
+              (filter === Filter.Completed && todo.completed) ||
+              (filter === Filter.Active && !todo.completed)
+            )
+          }),
 
       sortedTodos: () => {
         const sort = get().sort
@@ -77,9 +90,15 @@ export const useTodoStore = create<TodoStore>()(
       },
 
       addTodo: async (title: string) => {
+        const loggedUser = get().loggedUser
+        if (!loggedUser) return
+
         const quote = await fetchQuote()
         set(() => ({
-          todos: [...get().todos, { ...parseTitle(title), id: uuid(), completed: false, quote }],
+          todos: [
+            ...get().todos,
+            { ...parseTitle(title), id: uuid(), completed: false, quote, owner: loggedUser },
+          ],
         }))
       },
       removeTodo: (id: string) => {
@@ -113,6 +132,17 @@ export const useTodoStore = create<TodoStore>()(
       setNextSort: () => {
         set(() => ({
           sort: get().nextSort(),
+        }))
+      },
+
+      login: (username: string) => {
+        set(() => ({
+          loggedUser: username,
+        }))
+      },
+      logout: () => {
+        set(() => ({
+          loggedUser: undefined,
         }))
       },
     }),

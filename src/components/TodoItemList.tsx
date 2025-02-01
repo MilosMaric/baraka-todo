@@ -1,18 +1,19 @@
-import { useTodoStore } from '../model/store.ts'
-import { KeyboardEventHandler, useMemo, useState } from 'react'
+import { useAppStore } from '../model/store.ts'
+import { useMemo, useState } from 'react'
 import { TodoItemView } from './TodoItemView.tsx'
 import { Filters } from './Filters.tsx'
 import { Sort } from '../model/types.ts'
 import { faArrowDown, faArrowsUpDown, faArrowUp } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { Input } from './Input.tsx'
 
 export const TodoItemList = () => {
   const [title, setTitle] = useState('')
-  const { sortedTodos, addTodo, nextSort, setNextSort } = useTodoStore()
+  const { sortedTodos, addTodo, nextSort, setNextSort } = useAppStore()
   const sort = nextSort()
 
-  const onKeyDown: KeyboardEventHandler<HTMLInputElement> = e => {
-    if (Boolean(title) && e.key === 'Enter') {
+  const onEnter = () => {
+    if (title) {
       setTitle('')
       addTodo(title)
     }
@@ -34,15 +35,7 @@ export const TodoItemList = () => {
       <div className="flex flex-col gap-3 items-center">
         <p className="text-2xl">New Todo item:</p>
         <div className="flex gap-1 flex-col items-center">
-          <input
-            autoFocus
-            type="text"
-            value={title}
-            onKeyDown={onKeyDown}
-            placeholder="Enter Todo title"
-            onChange={e => setTitle(e.target.value)}
-            className="border-2 border-indigo-300 outline-0 rounded-md p-2 min-w-lg"
-          />
+          <Input autoFocus value={title} onEnter={onEnter} onChange={setTitle} />
           <p className="text-indigo-300 italic text-sm">Press Enter to Add</p>
           <p className="text-indigo-300 italic text-sm">
             Finish with "+N" to add Due Date N days from now

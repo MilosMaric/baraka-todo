@@ -1,4 +1,4 @@
-import { useTodoStore } from '../model/store.ts'
+import { useAppStore } from '../model/store.ts'
 import { TodoItem } from '../model/types.ts'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCancel, faCheck, faTrash } from '@fortawesome/free-solid-svg-icons'
@@ -8,7 +8,7 @@ import { formatDistanceToNow } from 'date-fns'
 const dueDateModifiers = [1, 2, 3, 5, 10, 15]
 
 export const TodoItemView = ({ todo }: { todo: TodoItem }) => {
-  const { removeTodo, toggleCompleted, extendDueDate } = useTodoStore()
+  const { removeTodo, toggleCompleted, extendDueDate } = useAppStore()
 
   return (
     <div
